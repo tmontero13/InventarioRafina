@@ -1,0 +1,170 @@
+/* Estilos generales */
+body {
+  font-family: 'Calibri', sans-serif;
+  background-color: #f9fafb;
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedor principal */
+.container {
+  padding: 2rem;
+}
+
+/* Toast de notificaciones */
+.toast {
+  background-color: #4caf50;
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Formulario */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 400px;
+  margin: 2rem auto;
+}
+
+/* Inputs y Selects */
+.input, .input-inventario {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: white;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input:focus, .input-inventario:focus {
+  border-color: #60a5fa;
+}
+
+/* Botón del Menú */
+.boton-menu {
+  padding: 1rem 2rem;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin: 0.5rem auto;
+  display: block;
+  transition: background-color 0.3s ease;
+}
+
+.boton-menu:hover {
+  background-color: #e5e7eb;
+}
+
+/* Botones de Formulario */
+.boton-formulario {
+  padding: 0.8rem;
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  margin-top: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.boton-formulario:hover {
+  background-color: #d1d5db;
+}
+
+/* Botones de acciones (exportar, editar, eliminar) */
+.boton-accion {
+  padding: 0.6rem 1.2rem;
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin: 0.25rem;
+  transition: background-color 0.3s ease;
+}
+
+.boton-accion:hover {
+  background-color: #d1d5db;
+}
+
+/* Tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+th {
+  background-color: #f3f4f6;
+  font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+/* Paginación */
+.pagination {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.pagination button {
+  margin: 0 0.3rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #e0e0e0;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #d1d5db;
+}
+
+.pagination button.active {
+  background-color: #60a5fa;
+  color: white;
+  border: 2px solid #3b82f6;
+}
+/* Scrollbar personalizada */
+div[style*="overflow-x: auto"]::-webkit-scrollbar {
+  height: 8px;
+}
+
+div[style*="overflow-x: auto"]::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+div[style*="overflow-x: auto"]::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 6px;
+}
+
+div[style*="overflow-x: auto"]::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+
