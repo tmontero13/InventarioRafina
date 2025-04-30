@@ -1,23 +1,18 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 
-// 👇 Estos son tus datos reales de Firebase (recuerda poner los tuyos)
 const firebaseConfig = {
-  apiKey: "AIzaSyDRw9Yzr2IlS8dtj8oKOiTIf-eI9lpA_tY",
-  authDomain: "inventario-rafina.firebaseapp.com",
-  databaseURL: "https://inventario-rafina-default-rtdb.firebaseio.com",
-  projectId: "inventario-rafina",
-  storageBucket: "inventario-rafina.firebasestorage.app",
-  messagingSenderId: "20295532001",
-  appId: "1:20295532001:web:8ec0e6bd7acfdf1d7aa6a0"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
-// 👇 Primero inicializamos la app
 const app = initializeApp(firebaseConfig);
-
-// 👇 Luego inicializamos el Storage
 const storage = getStorage(app);
 
-// 👇 Y exportamos el storage correctamente
 export { storage };
 
