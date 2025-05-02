@@ -142,7 +142,24 @@ function InventarioApp() {
   
 
   const exportarExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(productos);
+    const dataConTotales = [...productos];
+  
+    // Calcular totales
+    const totalUnidades = productos.reduce((acc, p) => acc + Number(p.unidades || 0), 0);
+    const valorTotal = productos.reduce(
+      (acc, p) => acc + Number(p.unidades || 0) * Number(p.precio || 0),
+      0
+    );
+  
+    // Agregar fila vacía y fila de totales
+    dataConTotales.push({});
+    dataConTotales.push({
+      nombre: "TOTALES",
+      unidades: totalUnidades,
+      precio: valorTotal,
+    });
+  
+    const ws = XLSX.utils.json_to_sheet(dataConTotales);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Inventario");
     XLSX.writeFile(wb, "inventario.xlsx");
@@ -224,6 +241,15 @@ function InventarioApp() {
           </div>
 
           <div style={{ overflowX: "auto" }}>
+          <p style={{ textAlign: "center", fontWeight: "bold", marginTop: "1rem" }}>
+  Total de unidades: {productosFiltrados.reduce((acc, p) => acc + Number(p.unidades || 0), 0)}
+</p>
+<p style={{ textAlign: "center", fontWeight: "bold", marginTop: "1rem" }}>
+  Total de unidades: {productosFiltrados.reduce((acc, p) => acc + Number(p.unidades || 0), 0)} <br />
+  Valor total estimado: {formatearPrecio(
+    productosFiltrados.reduce((acc, p) => acc + (Number(p.unidades || 0) * Number(p.precio || 0)), 0)
+  )}
+</p>
   <table>
     <thead>
       <tr>
@@ -232,6 +258,7 @@ function InventarioApp() {
         <th>Color</th>
         <th>Talla</th>
         <th>Precio</th>
+        <th>Unidades</th> {/* NUEVO */}
         <th>Imagen</th>
         <th>Acciones</th>
       </tr>
@@ -243,6 +270,7 @@ function InventarioApp() {
           <td>{p.categoria}</td>
           <td>{p.color}</td>
           <td>{p.talla}</td>
+          <td>{p.unidades}</td> {/* NUEVO */}
           <td>{formatearPrecio(p.precio)}</td>
           <td>
             {p.imagenURL && (
