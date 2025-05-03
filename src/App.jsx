@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage"; // <-- renombrado
 import { storage } from "./firebaseConfig";
 import { v4 as uuidv4 } from "uuid";
 import * as XLSX from "xlsx";
 import "./styles.css";
 import Swal from 'sweetalert2';
+import { database, ref, onValue } from "./firebaseConfig";
+import { remove } from "firebase/database";
+
+
 
 
 const categorias = ["Vestidos", "Pantalones", "Tops", "Polleras", "Tapados", "Abrigos", "Chaquetas", "Complementos"];
@@ -35,15 +39,25 @@ function InventarioApp() {
   const productosPorPagina = 20;
 
   useEffect(() => {
-    const productosGuardados = JSON.parse(localStorage.getItem("productos"));
-    if (productosGuardados) {
-      setProductos(productosGuardados);
-    }
+    const productosRef = ref(database, "productos");
+  
+    const unsubscribe = onValue(productosRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const productosArray = Object.entries(data).map(([key, value]) => ({
+          id: key,
+          ...value,
+        }));
+        setProductos(productosArray);
+      } else {
+        setProductos([]);
+      }
+    });
+  
+    // Cleanup por si el componente se desmonta
+    return () => unsubscribe();
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("productos", JSON.stringify(productos));
-  }, [productos]);
+  
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -67,24 +81,25 @@ function InventarioApp() {
     if (form.foto && typeof form.foto !== "string") {
       try {
         const nombreSeguro = sanitizeFileName(form.foto.name);
-        const storageRef = ref(storage, `fotos/${nombreSeguro}`);
-        await uploadBytes(storageRef, form.foto);
+        const storageReference = storageRef(storage, `fotos/${nombreDelArchivo}`);
+await uploadBytes(storageReference, archivo);
+
         url = await getDownloadURL(storageRef);
       } catch (error) {
         console.error("Error al subir imagen:", error);
       }
     }
   
-    const nuevoProducto = { id: uuidv4(), ...form, imagenURL: url };
-  
-    if (editandoIndex !== null) {
-      const productosActualizados = [...productos];
-      productosActualizados[editandoIndex] = nuevoProducto;
-      setProductos(productosActualizados);
-      setEditandoIndex(null);
-    } else {
-      setProductos([...productos, nuevoProducto]);
+    try {
+      const productosRef = ref(database, "productos");
+      const nuevoProductoRef = push(productosRef);
+      const productoId = nuevoProductoRef.key;
+      const nuevoProducto = { id: productoId, ...form, imagenURL: url };
+      await set(nuevoProductoRef, nuevoProducto);
+    } catch (error) {
+      console.error("Error al guardar en Firebase:", error);
     }
+    
   
     Swal.fire({
       icon: 'success',
@@ -117,6 +132,8 @@ function InventarioApp() {
   };
 
   const handleEliminar = (index) => {
+    const producto = productos[index]; // obtenemos el producto por su posición en el array
+  
     Swal.fire({
       title: '¿Estás seguro?',
       text: "¡No podrás revertir esto!",
@@ -128,17 +145,19 @@ function InventarioApp() {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        const nuevosProductos = productos.filter((_, i) => i !== index);
-        setProductos(nuevosProductos);
-  
-        Swal.fire(
-          '¡Eliminado!',
-          'El producto ha sido eliminado correctamente.',
-          'success'
-        );
+        const productoRef = ref(database, `productos/${producto.id}`);
+        remove(productoRef)
+          .then(() => {
+            Swal.fire('¡Eliminado!', 'El producto ha sido eliminado correctamente.', 'success');
+          })
+          .catch((error) => {
+            console.error("Error al eliminar producto:", error);
+            Swal.fire('Error', 'No se pudo eliminar el producto.', 'error');
+          });
       }
     });
   };
+  
   
 
   const exportarExcel = () => {
