@@ -245,7 +245,7 @@ function InventarioApp() {
   Total de unidades: {productosFiltrados.reduce((acc, p) => acc + Number(p.unidades || 0), 0)}
 </p>
 <p style={{ textAlign: "center", fontWeight: "bold", marginTop: "1rem" }}>
-  Total de unidades: {productosFiltrados.reduce((acc, p) => acc + Number(p.unidades || 0), 0)} <br />
+
   Valor total estimado: {formatearPrecio(
     productosFiltrados.reduce((acc, p) => acc + (Number(p.unidades || 0) * Number(p.precio || 0)), 0)
   )}
