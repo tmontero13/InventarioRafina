@@ -264,30 +264,31 @@ function InventarioApp() {
       </tr>
     </thead>
     <tbody>
-      {productosPaginados.map((p, idx) => (
-        <tr key={p.id}>
-          <td>{p.nombre}</td>
-          <td>{p.categoria}</td>
-          <td>{p.color}</td>
-          <td>{p.talla}</td>
-          <td>{p.unidades}</td> {/* NUEVO */}
-          <td>{formatearPrecio(p.precio)}</td>
-          <td>
-            {p.imagenURL && (
-              <img
-                src={p.imagenURL}
-                alt="Producto"
-                style={{ width: "50px", height: "50px", objectFit: "cover" }}
-              />
-            )}
-          </td>
-          <td>
-            <button onClick={() => handleEditar(idx)} className="boton-accion" style={{ marginRight: "0.5rem" }}>✏️</button>
-            <button onClick={() => handleEliminar(idx)} className="boton-accion">🗑️</button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
+  {productosPaginados.map((p, idx) => (
+    <tr key={p.id}>
+      <td>{p.nombre}</td>
+      <td>{p.categoria}</td>
+      <td>{p.color}</td>
+      <td>{p.talla}</td>
+      <td>{formatearPrecio(p.precio)}</td> {/* precio con formato */}
+      <td>{p.unidades}</td> {/* unidades sin formato */}
+      <td>
+        {p.imagenURL && (
+          <img
+            src={p.imagenURL}
+            alt="Producto"
+            style={{ width: "50px", height: "50px", objectFit: "cover" }}
+          />
+        )}
+      </td>
+      <td>
+        <button onClick={() => handleEditar(idx)} className="boton-accion" style={{ marginRight: "0.5rem" }}>✏️</button>
+        <button onClick={() => handleEliminar(idx)} className="boton-accion">🗑️</button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
   </table>
 </div>
 
